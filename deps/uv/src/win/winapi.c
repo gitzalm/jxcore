@@ -36,13 +36,13 @@ sGetQueuedCompletionStatusEx pGetQueuedCompletionStatusEx;
 sSetFileCompletionNotificationModes pSetFileCompletionNotificationModes;
 sCreateSymbolicLinkW pCreateSymbolicLinkW;
 sCancelIoEx pCancelIoEx;
-sInitializeSRWLock pInitializeSRWLock;
-sAcquireSRWLockShared pAcquireSRWLockShared;
-sAcquireSRWLockExclusive pAcquireSRWLockExclusive;
-sTryAcquireSRWLockShared pTryAcquireSRWLockShared;
-sTryAcquireSRWLockExclusive pTryAcquireSRWLockExclusive;
-sReleaseSRWLockShared pReleaseSRWLockShared;
-sReleaseSRWLockExclusive pReleaseSRWLockExclusive;
+//sInitializeSRWLock pInitializeSRWLock;
+//sAcquireSRWLockShared pAcquireSRWLockShared;
+//sAcquireSRWLockExclusive pAcquireSRWLockExclusive;
+//sTryAcquireSRWLockShared pTryAcquireSRWLockShared;
+//sTryAcquireSRWLockExclusive pTryAcquireSRWLockExclusive;
+//sReleaseSRWLockShared pReleaseSRWLockShared;
+//sReleaseSRWLockExclusive pReleaseSRWLockExclusive;
 sInitializeConditionVariable pInitializeConditionVariable;
 sSleepConditionVariableCS pSleepConditionVariableCS;
 sSleepConditionVariableSRW pSleepConditionVariableSRW;
@@ -104,27 +104,6 @@ void uv_winapi_init() {
       kernel32_module, "CreateSymbolicLinkW");
 
   pCancelIoEx = (sCancelIoEx)GetProcAddress(kernel32_module, "CancelIoEx");
-
-  pInitializeSRWLock =
-      (sInitializeSRWLock)GetProcAddress(kernel32_module, "InitializeSRWLock");
-
-  pAcquireSRWLockShared = (sAcquireSRWLockShared)GetProcAddress(
-      kernel32_module, "AcquireSRWLockShared");
-
-  pAcquireSRWLockExclusive = (sAcquireSRWLockExclusive)GetProcAddress(
-      kernel32_module, "AcquireSRWLockExclusive");
-
-  pTryAcquireSRWLockShared = (sTryAcquireSRWLockShared)GetProcAddress(
-      kernel32_module, "TryAcquireSRWLockShared");
-
-  pTryAcquireSRWLockExclusive = (sTryAcquireSRWLockExclusive)GetProcAddress(
-      kernel32_module, "TryAcquireSRWLockExclusive");
-
-  pReleaseSRWLockShared = (sReleaseSRWLockShared)GetProcAddress(
-      kernel32_module, "ReleaseSRWLockShared");
-
-  pReleaseSRWLockExclusive = (sReleaseSRWLockExclusive)GetProcAddress(
-      kernel32_module, "ReleaseSRWLockExclusive");
 
   pInitializeConditionVariable = (sInitializeConditionVariable)GetProcAddress(
       kernel32_module, "InitializeConditionVariable");

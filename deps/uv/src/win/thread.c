@@ -140,58 +140,34 @@ void uv_mutex_unlock(uv_mutex_t* mutex) { LeaveCriticalSection(mutex); }
 int uv_rwlock_init(uv_rwlock_t* rwlock) {
   uv__once_init();
 
-  if (HAVE_SRWLOCK_API())
-    return uv__rwlock_srwlock_init(rwlock);
-  else
-    return uv__rwlock_fallback_init(rwlock);
+  return uv__rwlock_fallback_init(rwlock);
 }
 
 void uv_rwlock_destroy(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    uv__rwlock_srwlock_destroy(rwlock);
-  else
-    uv__rwlock_fallback_destroy(rwlock);
+  uv__rwlock_fallback_destroy(rwlock);
 }
 
 void uv_rwlock_rdlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    uv__rwlock_srwlock_rdlock(rwlock);
-  else
-    uv__rwlock_fallback_rdlock(rwlock);
+   uv__rwlock_fallback_rdlock(rwlock);
 }
 
 int uv_rwlock_tryrdlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    return uv__rwlock_srwlock_tryrdlock(rwlock);
-  else
     return uv__rwlock_fallback_tryrdlock(rwlock);
 }
 
 void uv_rwlock_rdunlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    uv__rwlock_srwlock_rdunlock(rwlock);
-  else
     uv__rwlock_fallback_rdunlock(rwlock);
 }
 
 void uv_rwlock_wrlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    uv__rwlock_srwlock_wrlock(rwlock);
-  else
     uv__rwlock_fallback_wrlock(rwlock);
 }
 
 int uv_rwlock_trywrlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    return uv__rwlock_srwlock_trywrlock(rwlock);
-  else
     return uv__rwlock_fallback_trywrlock(rwlock);
 }
 
 void uv_rwlock_wrunlock(uv_rwlock_t* rwlock) {
-  if (HAVE_SRWLOCK_API())
-    uv__rwlock_srwlock_wrunlock(rwlock);
-  else
     uv__rwlock_fallback_wrunlock(rwlock);
 }
 
@@ -224,7 +200,7 @@ int uv_sem_trywait(uv_sem_t* sem) {
 }
 
 inline static int uv__rwlock_srwlock_init(uv_rwlock_t* rwlock) {
-  pInitializeSRWLock(&rwlock->srwlock_);
+  //pInitializeSRWLock(&rwlock->srwlock_);
   return 0;
 }
 
@@ -233,33 +209,27 @@ inline static void uv__rwlock_srwlock_destroy(uv_rwlock_t* rwlock) {
 }
 
 inline static void uv__rwlock_srwlock_rdlock(uv_rwlock_t* rwlock) {
-  pAcquireSRWLockShared(&rwlock->srwlock_);
+//  pAcquireSRWLockShared(&rwlock->srwlock_);
 }
 
 inline static int uv__rwlock_srwlock_tryrdlock(uv_rwlock_t* rwlock) {
-  if (pTryAcquireSRWLockShared(&rwlock->srwlock_))
     return 0;
-  else
-    return -1;
 }
 
 inline static void uv__rwlock_srwlock_rdunlock(uv_rwlock_t* rwlock) {
-  pReleaseSRWLockShared(&rwlock->srwlock_);
+//  pReleaseSRWLockShared(&rwlock->srwlock_);
 }
 
 inline static void uv__rwlock_srwlock_wrlock(uv_rwlock_t* rwlock) {
-  pAcquireSRWLockExclusive(&rwlock->srwlock_);
+//  pAcquireSRWLockExclusive(&rwlock->srwlock_);
 }
 
 inline static int uv__rwlock_srwlock_trywrlock(uv_rwlock_t* rwlock) {
-  if (pTryAcquireSRWLockExclusive(&rwlock->srwlock_))
     return 0;
-  else
-    return -1;
 }
 
 inline static void uv__rwlock_srwlock_wrunlock(uv_rwlock_t* rwlock) {
-  pReleaseSRWLockExclusive(&rwlock->srwlock_);
+//  pReleaseSRWLockExclusive(&rwlock->srwlock_);
 }
 
 inline static int uv__rwlock_fallback_init(uv_rwlock_t* rwlock) {

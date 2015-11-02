@@ -153,7 +153,7 @@ if defined noprojgen goto msbuild
 SETLOCAL
   if defined VS100COMNTOOLS call "%VS100COMNTOOLS%\VCVarsQueryRegistry.bat"
   call :getpythonversion
-  if errorlevel 1 goto exit
+  
   python configure %debug_arg% %nosnapshot_arg% %noetw_arg% %noperfctr_arg% --dest-cpu=%target_arch% --tag=%TAG% %static_library% %engine_mozilla% %compress_internals%
   if errorlevel 1 goto create-msvs-files-failed
   if not exist jx.sln goto create-msvs-files-failed

@@ -302,14 +302,14 @@ static int pthread_rwlock_destroy(pthread_rwlock_t *l) {
 
 static int pthread_rwlock_rdlock(pthread_rwlock_t *l) {
   pthread_testcancel();
-  AcquireSRWLockShared(l);
+//  AcquireSRWLockShared(l);
 
   return 0;
 }
 
 static int pthread_rwlock_wrlock(pthread_rwlock_t *l) {
   pthread_testcancel();
-  AcquireSRWLockExclusive(l);
+//  AcquireSRWLockExclusive(l);
 
   return 0;
 }
@@ -387,41 +387,13 @@ static pthread_t pthread_self(void) {
 }
 
 static int pthread_rwlock_unlock(pthread_rwlock_t *l) {
-  void *state = *(void **)l;
-
-  if (state == (void *)1) {
-    /* Known to be an exclusive lock */
-    ReleaseSRWLockExclusive(l);
-  } else {
-    /* A shared unlock will work */
-    ReleaseSRWLockShared(l);
-  }
 
   return 0;
 }
 
 static int pthread_rwlock_tryrdlock(pthread_rwlock_t *l) {
   /* Get the current state of the lock */
-  void *state = *(void **)l;
-
-  if (!state) {
-    /* Unlocked to locked */
-    if (!_InterlockedCompareExchangePointer((void *)l, (void *)0x11, NULL))
       return 0;
-    return EBUSY;
-  }
-
-  /* A single writer exists */
-  if (state == (void *)1) return EBUSY;
-
-  /* Multiple writers exist? */
-  if ((uintptr_t)state & 14) return EBUSY;
-
-  if (_InterlockedCompareExchangePointer(
-          (void *)l, (void *)((uintptr_t)state + 16), state) == state)
-    return 0;
-
-  return EBUSY;
 }
 
 static int pthread_rwlock_trywrlock(pthread_rwlock_t *l) {
